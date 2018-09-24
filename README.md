@@ -1,1 +1,1 @@
-#Basics C programs based on mathematics
+Basics C programs based on mathematics
