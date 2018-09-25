@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <math.h>
 
-void displayResult(float a, float b, float delta, float c, float x1, float x2);
-void computeSol(float a, float b, float c, float delta, float *x1, float *x2);
+void computeSol(float a, float b, float c, float delta, float* x1, float* x2);
+void displayResult(float a, float b, float c, float delta, float x1, float x2);
+int sign(float b);
 
 int main(int argc, char const *argv[])
 {
-    printf("Solving a quadratic equation whose form is ax² + bx + c = 0\n");
 /// Required data
     float epsilon = pow(10, -20);
     float a = epsilon, b = 1/epsilon, c = -epsilon;
@@ -14,7 +14,7 @@ int main(int argc, char const *argv[])
     float delta = 0;
 
 /// Discriminant calculation
-    delta = b*b-4*a*c;
+delta = b*b-4*a*c;
 
 /// Roots calclulation
     computeSol(a, b, c, delta, &x1, &x2);
@@ -22,6 +22,12 @@ int main(int argc, char const *argv[])
 /// Results output
     displayResult(a, b, c, delta, x1, x2);
     return 0;
+}
+
+void computeSol(float a, float b, float c, float delta, float* x1, float* x2) {
+    float q = -(b+sign(b)*sqrt(delta))/2;
+    *x1 = q/a;
+    *x2 = c/q;
 }
 
 void displayResult(float a, float b, float c, float delta, float x1, float x2) {
@@ -37,13 +43,9 @@ void displayResult(float a, float b, float c, float delta, float x1, float x2) {
     }
 }
 
-void computeSol(float a, float b, float c, float delta, float *x1, float *x2) {
-/// Test of delta's sign
-    if(delta < 0) {
-        printf("The discriminant is negative : no real roots");
-    } else {
-/// Calculation of roots if they exist
-        *x1 = (-b + sqrt(delta))/(2*a);
-        *x2 = (-b - sqrt(delta))/(2*a);
-    }
+int sign(float b) {
+    if(b >= 0)
+        return 1;
+    else
+        return -1;
 }
