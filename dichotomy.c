@@ -2,8 +2,8 @@
 #include <math.h>
 
 float f(float x);
-void displayResult(float a, float b, float ksi, float epsilon);
-float dichotomy(float a, float b, float epsilon);
+void displayResult(float a, float b, float ksi, float epsilon, unsigned int nbLoop);
+float dichotomy(float a, float b, float epsilon, unsigned int* nbLoop);
 void enterData(float* a, float* b);
 
 int main(int argc, char const *argv[])
@@ -15,11 +15,12 @@ int main(int argc, char const *argv[])
     float epsilon = 1e-6; // the precision
     float ksi = 1234; // the solution to find
     float f = -36.5f;
+    unsigned int nbLoop = 0;
 /// Computing
     enterData(&a, &b);
-    ksi = dichotomy(a, b, epsilon);
+    ksi = dichotomy(a, b, epsilon, &nbLoop);
 /// Output
-    displayResult(a, b, ksi, epsilon);
+    displayResult(a, b, ksi, epsilon, nbLoop);
     return 0;
 }
 
@@ -30,12 +31,13 @@ void enterData(float* a, float* b) {
     scanf("%g",b);
 }
 
-float dichotomy(float a, float b, float epsilon) {
+float dichotomy(float a, float b, float epsilon, unsigned int* nbLoop) {
     float an = a;
     float bn = b;
     float xn = (an+bn)/2;
 
     while(fabs(an-bn) > epsilon) {
+        ++*(nbLoop);
         xn = (an+bn)/2;
         // if ksi belongs to [an, xn]
         if(f(an)*f(xn) < 0) {
@@ -47,11 +49,11 @@ float dichotomy(float a, float b, float epsilon) {
     return xn;
 }
 
-void displayResult(float a, float b, float ksi, float epsilon) {
+void displayResult(float a, float b, float ksi, float epsilon, unsigned int nbLoop) {
     printf("the solution in the interval [%g;%g] is ksi = %g with a margin of %g \n",a,b,ksi,epsilon);
+    printf("Done with a loop number equals to %d\n", nbLoop);
 }
 
 float f(float x) {
     return x-2-log(x);
 }
-
